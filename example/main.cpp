@@ -75,7 +75,6 @@ int main(int argc, char** argv){
     //using FLOAT_T = float;
 
     TIMERSTARTCPU(total_runtime_with_output)
-    TIMERSTARTCPU(total_runtime_without_output)
 
 	//// Binning
     int n_cosines = 200;
