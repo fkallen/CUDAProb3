@@ -1,0 +1,357 @@
+\hypertarget{classcudaprob3_1_1CudaPropagator}{}\section{cudaprob3\+:\+:Cuda\+Propagator$<$ F\+L\+O\+A\+T\+\_\+T $>$ Class Template Reference}
+\label{classcudaprob3_1_1CudaPropagator}\index{cudaprob3\+::\+Cuda\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$@{cudaprob3\+::\+Cuda\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$}}
+
+
+Multi-\/\+G\+PU neutrino propagation. Derived from \hyperlink{classcudaprob3_1_1Propagator}{Propagator}.  
+
+
+
+
+Inheritance diagram for cudaprob3\+:\+:Cuda\+Propagator$<$ F\+L\+O\+A\+T\+\_\+T $>$\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{classcudaprob3_1_1CudaPropagator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for cudaprob3\+:\+:Cuda\+Propagator$<$ F\+L\+O\+A\+T\+\_\+T $>$\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{classcudaprob3_1_1CudaPropagator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classcudaprob3_1_1CudaPropagator_a9c7a73139fc4c8170357cca34c63137c}{Cuda\+Propagator} (int nc, int ne)
+\begin{DoxyCompactList}\small\item\em Single G\+PU constructor for device id 0. \end{DoxyCompactList}\item 
+\hyperlink{classcudaprob3_1_1CudaPropagator_abd40857d62f2b71e1926913d155382d9}{Cuda\+Propagator} (const std\+::vector$<$ int $>$ \&ids, int nc, int ne, bool fail\+On\+Invalid\+Id=true)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\hyperlink{classcudaprob3_1_1CudaPropagator_a900f5cc60675c9aeee91297bc8794095}{Cuda\+Propagator} (\hyperlink{classcudaprob3_1_1CudaPropagator}{Cuda\+Propagator} \&\&other)
+\begin{DoxyCompactList}\small\item\em Move constructor. \end{DoxyCompactList}\item 
+\hyperlink{classcudaprob3_1_1CudaPropagator}{Cuda\+Propagator} \& \hyperlink{classcudaprob3_1_1CudaPropagator_aa49d62a4d79bac574a53e291b084089a}{operator=} (\hyperlink{classcudaprob3_1_1CudaPropagator}{Cuda\+Propagator} \&\&other)
+\begin{DoxyCompactList}\small\item\em Move assignment operator. \end{DoxyCompactList}\item 
+void \hyperlink{classcudaprob3_1_1CudaPropagator_a61124bdc43a631b55ad1e9bd36a872eb}{set\+Density\+From\+File} (const std\+::string \&filename) override
+\begin{DoxyCompactList}\small\item\em Set density information from file. \end{DoxyCompactList}\item 
+void \hyperlink{classcudaprob3_1_1CudaPropagator_a90deddfaf8ab3c830a60d5ad5fbcfb43}{set\+Density} (const std\+::vector$<$ F\+L\+O\+A\+T\+\_\+T $>$ \&radii, const std\+::vector$<$ F\+L\+O\+A\+T\+\_\+T $>$ \&rhos) override
+\begin{DoxyCompactList}\small\item\em Set density information from arrays. \end{DoxyCompactList}\item 
+void \hyperlink{classcudaprob3_1_1CudaPropagator_abb9d8cc79c88f9cf6886cd334ed9e869}{set\+Neutrino\+Masses} (F\+L\+O\+A\+T\+\_\+T dm12sq, F\+L\+O\+A\+T\+\_\+T dm23sq) override
+\begin{DoxyCompactList}\small\item\em Set neutrino mass differences (m\+\_\+i\+\_\+j)$^\wedge$2 in (eV)$^\wedge$2. no assumptions about mass hierarchy are made. \end{DoxyCompactList}\item 
+void \hyperlink{classcudaprob3_1_1CudaPropagator_ad4fd47cd63e3b45919ae80d876698ac4}{set\+M\+N\+S\+Matrix} (F\+L\+O\+A\+T\+\_\+T theta12, F\+L\+O\+A\+T\+\_\+T theta13, F\+L\+O\+A\+T\+\_\+T theta23, F\+L\+O\+A\+T\+\_\+T d\+CP) override
+\begin{DoxyCompactList}\small\item\em Set mixing angles and cp phase in radians. \end{DoxyCompactList}\item 
+void \hyperlink{classcudaprob3_1_1CudaPropagator_aa2fd3a1c4c30ea967e5ac14a32ee5b7f}{set\+Energy\+List} (const std\+::vector$<$ F\+L\+O\+A\+T\+\_\+T $>$ \&list) override
+\begin{DoxyCompactList}\small\item\em Set the energy bins. Energies are given in GeV. \end{DoxyCompactList}\item 
+void \hyperlink{classcudaprob3_1_1CudaPropagator_afb6f73bd2451d64cfcd2b893b9b86413}{set\+Cosine\+List} (const std\+::vector$<$ F\+L\+O\+A\+T\+\_\+T $>$ \&list) override
+\begin{DoxyCompactList}\small\item\em Set cosine bins. Cosines are given in radians. \end{DoxyCompactList}\item 
+void \hyperlink{classcudaprob3_1_1CudaPropagator_ad639f2aa32a548b74a9a9c82d498b24a}{set\+Production\+Height} (F\+L\+O\+A\+T\+\_\+T height\+KM) override
+\begin{DoxyCompactList}\small\item\em Set production height in km of neutrinos. \end{DoxyCompactList}\item 
+void \hyperlink{classcudaprob3_1_1CudaPropagator_abafc49cd41569e985bd3bd9e07b31149}{calculate\+Probabilities} (Neutrino\+Type type) override
+\begin{DoxyCompactList}\small\item\em Calculate the probability of each cell. \end{DoxyCompactList}\item 
+F\+L\+O\+A\+T\+\_\+T \hyperlink{classcudaprob3_1_1CudaPropagator_a3cde10f1ca21db8896420649dc5d4734}{get\+Probability} (int index\+\_\+cosine, int index\+\_\+energy, Prob\+Type t) override
+\begin{DoxyCompactList}\small\item\em get oscillation weight for specific cosine and energy \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class F\+L\+O\+A\+T\+\_\+T$>$\\*
+class cudaprob3\+::\+Cuda\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$}
+
+Multi-\/\+G\+PU neutrino propagation. Derived from \hyperlink{classcudaprob3_1_1Propagator}{Propagator}. 
+
+This is essentially a wrapper around multiple \hyperlink{classcudaprob3_1_1CudaPropagatorSingle}{Cuda\+Propagator\+Single} instances, one per used G\+PU Most of the setters and calculation functions simply call the appropriate function for each G\+PU 
+\begin{DoxyParams}{Parameters}
+{\em F\+L\+O\+A\+T\+\_\+T} & The floating point type to use for calculations, i.\+e float, double \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}!Cuda\+Propagator@{Cuda\+Propagator}}
+\index{Cuda\+Propagator@{Cuda\+Propagator}!cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}}
+\subsubsection[{\texorpdfstring{Cuda\+Propagator(int nc, int ne)}{CudaPropagator(int nc, int ne)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ {\bf cudaprob3\+::\+Cuda\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::{\bf Cuda\+Propagator} (
+\begin{DoxyParamCaption}
+\item[{int}]{nc, }
+\item[{int}]{ne}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classcudaprob3_1_1CudaPropagator_a9c7a73139fc4c8170357cca34c63137c}{}\label{classcudaprob3_1_1CudaPropagator_a9c7a73139fc4c8170357cca34c63137c}
+
+
+Single G\+PU constructor for device id 0. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nc} & Number cosine bins \\
+\hline
+{\em ne} & Number of energy bins \\
+\hline
+\end{DoxyParams}
+\index{cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}!Cuda\+Propagator@{Cuda\+Propagator}}
+\index{Cuda\+Propagator@{Cuda\+Propagator}!cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}}
+\subsubsection[{\texorpdfstring{Cuda\+Propagator(const std\+::vector$<$ int $>$ \&ids, int nc, int ne, bool fail\+On\+Invalid\+Id=true)}{CudaPropagator(const std::vector< int > &ids, int nc, int ne, bool failOnInvalidId=true)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ {\bf cudaprob3\+::\+Cuda\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::{\bf Cuda\+Propagator} (
+\begin{DoxyParamCaption}
+\item[{const std\+::vector$<$ int $>$ \&}]{ids, }
+\item[{int}]{nc, }
+\item[{int}]{ne, }
+\item[{bool}]{fail\+On\+Invalid\+Id = {\ttfamily true}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classcudaprob3_1_1CudaPropagator_abd40857d62f2b71e1926913d155382d9}{}\label{classcudaprob3_1_1CudaPropagator_abd40857d62f2b71e1926913d155382d9}
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ids} & List of device ids of the G\+P\+Us to use \\
+\hline
+{\em nc} & Number cosine bins \\
+\hline
+{\em ne} & Number of energy bins \\
+\hline
+{\em fail\+On\+Invalid\+Id} & If true, throw exception if ids contains an invalid device id \\
+\hline
+\end{DoxyParams}
+\index{cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}!Cuda\+Propagator@{Cuda\+Propagator}}
+\index{Cuda\+Propagator@{Cuda\+Propagator}!cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}}
+\subsubsection[{\texorpdfstring{Cuda\+Propagator(\+Cuda\+Propagator \&\&other)}{CudaPropagator(CudaPropagator &&other)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ {\bf cudaprob3\+::\+Cuda\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::{\bf Cuda\+Propagator} (
+\begin{DoxyParamCaption}
+\item[{{\bf Cuda\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$ \&\&}]{other}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classcudaprob3_1_1CudaPropagator_a900f5cc60675c9aeee91297bc8794095}{}\label{classcudaprob3_1_1CudaPropagator_a900f5cc60675c9aeee91297bc8794095}
+
+
+Move constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\index{cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}!calculate\+Probabilities@{calculate\+Probabilities}}
+\index{calculate\+Probabilities@{calculate\+Probabilities}!cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}}
+\subsubsection[{\texorpdfstring{calculate\+Probabilities(\+Neutrino\+Type type) override}{calculateProbabilities(NeutrinoType type) override}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ void {\bf cudaprob3\+::\+Cuda\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::calculate\+Probabilities (
+\begin{DoxyParamCaption}
+\item[{Neutrino\+Type}]{type}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}\hypertarget{classcudaprob3_1_1CudaPropagator_abafc49cd41569e985bd3bd9e07b31149}{}\label{classcudaprob3_1_1CudaPropagator_abafc49cd41569e985bd3bd9e07b31149}
+
+
+Calculate the probability of each cell. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & Neutrino or Antineutrino \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classcudaprob3_1_1Propagator_abe3045e287c6a0646474189b3cff14c7}{cudaprob3\+::\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$}.
+
+\index{cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}!get\+Probability@{get\+Probability}}
+\index{get\+Probability@{get\+Probability}!cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}}
+\subsubsection[{\texorpdfstring{get\+Probability(int index\+\_\+cosine, int index\+\_\+energy, Prob\+Type t) override}{getProbability(int index_cosine, int index_energy, ProbType t) override}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ F\+L\+O\+A\+T\+\_\+T {\bf cudaprob3\+::\+Cuda\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::get\+Probability (
+\begin{DoxyParamCaption}
+\item[{int}]{index\+\_\+cosine, }
+\item[{int}]{index\+\_\+energy, }
+\item[{Prob\+Type}]{t}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}\hypertarget{classcudaprob3_1_1CudaPropagator_a3cde10f1ca21db8896420649dc5d4734}{}\label{classcudaprob3_1_1CudaPropagator_a3cde10f1ca21db8896420649dc5d4734}
+
+
+get oscillation weight for specific cosine and energy 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index\+\_\+cosine} & Cosine bin index (zero based) \\
+\hline
+{\em index\+\_\+energy} & Energy bin index (zero based) \\
+\hline
+{\em t} & Specify which probability P(i-\/$>$j) \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classcudaprob3_1_1Propagator_a279ff90463e887754db8379c9582c943}{cudaprob3\+::\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$}.
+
+\index{cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}!operator=@{operator=}}
+\index{operator=@{operator=}!cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}}
+\subsubsection[{\texorpdfstring{operator=(\+Cuda\+Propagator \&\&other)}{operator=(CudaPropagator &&other)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ {\bf Cuda\+Propagator}\& {\bf cudaprob3\+::\+Cuda\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::operator= (
+\begin{DoxyParamCaption}
+\item[{{\bf Cuda\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$ \&\&}]{other}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classcudaprob3_1_1CudaPropagator_aa49d62a4d79bac574a53e291b084089a}{}\label{classcudaprob3_1_1CudaPropagator_aa49d62a4d79bac574a53e291b084089a}
+
+
+Move assignment operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & \\
+\hline
+\end{DoxyParams}
+\index{cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}!set\+Cosine\+List@{set\+Cosine\+List}}
+\index{set\+Cosine\+List@{set\+Cosine\+List}!cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}}
+\subsubsection[{\texorpdfstring{set\+Cosine\+List(const std\+::vector$<$ F\+L\+O\+A\+T\+\_\+\+T $>$ \&list) override}{setCosineList(const std::vector< FLOAT_T > &list) override}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ void {\bf cudaprob3\+::\+Cuda\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::set\+Cosine\+List (
+\begin{DoxyParamCaption}
+\item[{const std\+::vector$<$ F\+L\+O\+A\+T\+\_\+T $>$ \&}]{list}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}\hypertarget{classcudaprob3_1_1CudaPropagator_afb6f73bd2451d64cfcd2b893b9b86413}{}\label{classcudaprob3_1_1CudaPropagator_afb6f73bd2451d64cfcd2b893b9b86413}
+
+
+Set cosine bins. Cosines are given in radians. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Cosine list \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classcudaprob3_1_1Propagator_ac2beb7d48c566ef0f07666927fbf5e3f}{cudaprob3\+::\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$}.
+
+\index{cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}!set\+Density@{set\+Density}}
+\index{set\+Density@{set\+Density}!cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}}
+\subsubsection[{\texorpdfstring{set\+Density(const std\+::vector$<$ F\+L\+O\+A\+T\+\_\+\+T $>$ \&radii, const std\+::vector$<$ F\+L\+O\+A\+T\+\_\+\+T $>$ \&rhos) override}{setDensity(const std::vector< FLOAT_T > &radii, const std::vector< FLOAT_T > &rhos) override}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ void {\bf cudaprob3\+::\+Cuda\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::set\+Density (
+\begin{DoxyParamCaption}
+\item[{const std\+::vector$<$ F\+L\+O\+A\+T\+\_\+T $>$ \&}]{radii\+\_\+, }
+\item[{const std\+::vector$<$ F\+L\+O\+A\+T\+\_\+T $>$ \&}]{rhos\+\_\+}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}\hypertarget{classcudaprob3_1_1CudaPropagator_a90deddfaf8ab3c830a60d5ad5fbcfb43}{}\label{classcudaprob3_1_1CudaPropagator_a90deddfaf8ab3c830a60d5ad5fbcfb43}
+
+
+Set density information from arrays. 
+
+radii\+\_\+ and rhos\+\_\+ must be same size. both radii\+\_\+ and rhos\+\_\+ must be sorted, in the same order. The density (g/cm$^\wedge$3) at a distance (km) from the center of the sphere between radii\+\_\+\mbox{[}i\mbox{]}, exclusive, and radii\+\_\+\mbox{[}j\mbox{]}, inclusive, i $<$ j is assumed to be rhos\+\_\+\mbox{[}j\mbox{]} 
+\begin{DoxyParams}{Parameters}
+{\em radii\+\_\+} & List of radii \\
+\hline
+{\em rhos\+\_\+} & List of densities \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classcudaprob3_1_1Propagator_a119a29681c30c9476f0b50ed07cb639d}{cudaprob3\+::\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$}.
+
+\index{cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}!set\+Density\+From\+File@{set\+Density\+From\+File}}
+\index{set\+Density\+From\+File@{set\+Density\+From\+File}!cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}}
+\subsubsection[{\texorpdfstring{set\+Density\+From\+File(const std\+::string \&filename) override}{setDensityFromFile(const std::string &filename) override}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ void {\bf cudaprob3\+::\+Cuda\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::set\+Density\+From\+File (
+\begin{DoxyParamCaption}
+\item[{const std\+::string \&}]{filename}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}\hypertarget{classcudaprob3_1_1CudaPropagator_a61124bdc43a631b55ad1e9bd36a872eb}{}\label{classcudaprob3_1_1CudaPropagator_a61124bdc43a631b55ad1e9bd36a872eb}
+
+
+Set density information from file. 
+
+File must contain two columns where the first column contains the radius (km) and the second column contains the density (g/cm³). The first row must have the radius 0. The last row must have to radius of the sphere
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & File with density information \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classcudaprob3_1_1Propagator_a7d40f7d7e0716e5b532a7a3a228d3b01}{cudaprob3\+::\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$}.
+
+\index{cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}!set\+Energy\+List@{set\+Energy\+List}}
+\index{set\+Energy\+List@{set\+Energy\+List}!cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}}
+\subsubsection[{\texorpdfstring{set\+Energy\+List(const std\+::vector$<$ F\+L\+O\+A\+T\+\_\+\+T $>$ \&list) override}{setEnergyList(const std::vector< FLOAT_T > &list) override}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ void {\bf cudaprob3\+::\+Cuda\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::set\+Energy\+List (
+\begin{DoxyParamCaption}
+\item[{const std\+::vector$<$ F\+L\+O\+A\+T\+\_\+T $>$ \&}]{list}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}\hypertarget{classcudaprob3_1_1CudaPropagator_aa2fd3a1c4c30ea967e5ac14a32ee5b7f}{}\label{classcudaprob3_1_1CudaPropagator_aa2fd3a1c4c30ea967e5ac14a32ee5b7f}
+
+
+Set the energy bins. Energies are given in GeV. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Energy list \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classcudaprob3_1_1Propagator_a1135d977c5034e982a63c583ab4dad06}{cudaprob3\+::\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$}.
+
+\index{cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}!set\+M\+N\+S\+Matrix@{set\+M\+N\+S\+Matrix}}
+\index{set\+M\+N\+S\+Matrix@{set\+M\+N\+S\+Matrix}!cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}}
+\subsubsection[{\texorpdfstring{set\+M\+N\+S\+Matrix(\+F\+L\+O\+A\+T\+\_\+\+T theta12, F\+L\+O\+A\+T\+\_\+\+T theta13, F\+L\+O\+A\+T\+\_\+\+T theta23, F\+L\+O\+A\+T\+\_\+\+T d\+C\+P) override}{setMNSMatrix(FLOAT_T theta12, FLOAT_T theta13, FLOAT_T theta23, FLOAT_T dCP) override}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ void {\bf cudaprob3\+::\+Cuda\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::set\+M\+N\+S\+Matrix (
+\begin{DoxyParamCaption}
+\item[{F\+L\+O\+A\+T\+\_\+T}]{theta12, }
+\item[{F\+L\+O\+A\+T\+\_\+T}]{theta13, }
+\item[{F\+L\+O\+A\+T\+\_\+T}]{theta23, }
+\item[{F\+L\+O\+A\+T\+\_\+T}]{d\+CP}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}\hypertarget{classcudaprob3_1_1CudaPropagator_ad4fd47cd63e3b45919ae80d876698ac4}{}\label{classcudaprob3_1_1CudaPropagator_ad4fd47cd63e3b45919ae80d876698ac4}
+
+
+Set mixing angles and cp phase in radians. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em theta12} & \\
+\hline
+{\em theta13} & \\
+\hline
+{\em theta23} & \\
+\hline
+{\em d\+CP} & \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classcudaprob3_1_1Propagator_ad866c252d72ae6cc0ed3fc3b76c7cac7}{cudaprob3\+::\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$}.
+
+\index{cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}!set\+Neutrino\+Masses@{set\+Neutrino\+Masses}}
+\index{set\+Neutrino\+Masses@{set\+Neutrino\+Masses}!cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}}
+\subsubsection[{\texorpdfstring{set\+Neutrino\+Masses(\+F\+L\+O\+A\+T\+\_\+\+T dm12sq, F\+L\+O\+A\+T\+\_\+\+T dm23sq) override}{setNeutrinoMasses(FLOAT_T dm12sq, FLOAT_T dm23sq) override}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ void {\bf cudaprob3\+::\+Cuda\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::set\+Neutrino\+Masses (
+\begin{DoxyParamCaption}
+\item[{F\+L\+O\+A\+T\+\_\+T}]{dm12sq, }
+\item[{F\+L\+O\+A\+T\+\_\+T}]{dm23sq}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}\hypertarget{classcudaprob3_1_1CudaPropagator_abb9d8cc79c88f9cf6886cd334ed9e869}{}\label{classcudaprob3_1_1CudaPropagator_abb9d8cc79c88f9cf6886cd334ed9e869}
+
+
+Set neutrino mass differences (m\+\_\+i\+\_\+j)$^\wedge$2 in (eV)$^\wedge$2. no assumptions about mass hierarchy are made. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dm12sq} & \\
+\hline
+{\em dm23sq} & \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classcudaprob3_1_1Propagator_adaa3bc796f0bca8ce177f364c559b262}{cudaprob3\+::\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$}.
+
+\index{cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}!set\+Production\+Height@{set\+Production\+Height}}
+\index{set\+Production\+Height@{set\+Production\+Height}!cudaprob3\+::\+Cuda\+Propagator@{cudaprob3\+::\+Cuda\+Propagator}}
+\subsubsection[{\texorpdfstring{set\+Production\+Height(\+F\+L\+O\+A\+T\+\_\+\+T height\+K\+M) override}{setProductionHeight(FLOAT_T heightKM) override}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ void {\bf cudaprob3\+::\+Cuda\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::set\+Production\+Height (
+\begin{DoxyParamCaption}
+\item[{F\+L\+O\+A\+T\+\_\+T}]{height\+KM}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}\hypertarget{classcudaprob3_1_1CudaPropagator_ad639f2aa32a548b74a9a9c82d498b24a}{}\label{classcudaprob3_1_1CudaPropagator_ad639f2aa32a548b74a9a9c82d498b24a}
+
+
+Set production height in km of neutrinos. 
+
+Adds a layer of length height\+KM with zero density to the density model 
+\begin{DoxyParams}{Parameters}
+{\em height\+KM} & Set neutrino production height \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classcudaprob3_1_1Propagator_a5db866f0c9852d65cc2b1e43bbc3bef5}{cudaprob3\+::\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+cudapropagator.\+cuh\end{DoxyCompactItemize}

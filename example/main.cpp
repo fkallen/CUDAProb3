@@ -118,7 +118,7 @@ int main(int argc, char** argv){
     // set mixing matrix. angles in radians
 	propagator->setMNSMatrix(theta12, theta13, theta23, dcp);
 
-    // set neutrino mass differences. unit: eV
+    // set neutrino mass differences. unit: eV^2
 	propagator->setNeutrinoMasses(dm12sq, dm23sq);
 
     // set density model

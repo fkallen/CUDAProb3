@@ -15,7 +15,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with CUDAProb3++.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifdef __NVCC__
+#ifdef __NVCC__  //change this to ifndef __NVCC__ before running doxygen. otherwise both classes are not included in the documentation
 
 #ifndef CUDAPROB3_CUDAPROPAGATOR_HPP
 #define CUDAPROB3_CUDAPROPAGATOR_HPP
@@ -33,26 +33,32 @@ along with CUDAProb3++.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace cudaprob3{
 
-
-
+    /// \class CudaPropagatorSingle
+    /// \brief Single-GPU neutrino propagation. Derived from Propagator
+    /// @param FLOAT_T The floating point type to use for calculations, i.e float, double
     template<class FLOAT_T>
     class CudaPropagatorSingle : public Propagator<FLOAT_T>{
         template<typename>
         friend class CudaPropagator;
     public:
 
+        /// \brief Constructor
+        ///
+        /// @param id device id of the GPU to use
+        /// @param n_cosines_ Number cosine bins
+        /// @param n_energies_ Number of energy bins
         CudaPropagatorSingle(int id, int n_cosines_, int n_energies_) : Propagator<FLOAT_T>(n_cosines_, n_energies_), deviceId(id){
 
             int nDevices;
 
-            cudaGetDeviceCount(&nDevices);
+            cudaGetDeviceCount(&nDevices); CUERR;
 
             if(nDevices == 0) throw std::runtime_error("No GPU found");
             if(id >= nDevices){
                 std::cout << "Available GPUs:" << std::endl;
                 for(int j = 0; j < nDevices; j++){
                     cudaDeviceProp prop;
-                    cudaGetDeviceProperties(&prop, j);
+                    cudaGetDeviceProperties(&prop, j); CUERR;
                     std::cout << "Id " << j << " : " << prop.name << std::endl;
                 }
                 throw std::runtime_error("The requested GPU Id " + std::to_string(id) + " is not available.");
@@ -63,21 +69,25 @@ namespace cudaprob3{
 
             cudaStreamCreate(&stream); CUERR;
 
-            // resize data structures
+            //allocate host arrays which are not already allocated by Propagator base class
             resultList = make_unique_pinned<FLOAT_T>(std::uint64_t(n_cosines_) * std::uint64_t(n_energies_) * std::uint64_t(9));
 
-
+            //allocate GPU arrays
             d_energy_list = make_unique_dev<FLOAT_T>(deviceId, n_energies_); CUERR;
             d_cosine_list = make_unique_dev<FLOAT_T>(deviceId, n_cosines_); CUERR;
             d_result_list = make_shared_dev<FLOAT_T>(deviceId, std::uint64_t(n_cosines_) * std::uint64_t(n_energies_) * std::uint64_t(9)); CUERR;
             d_maxlayers = make_unique_dev<int>(deviceId, this->n_cosines);
         }
 
-
-        CudaPropagatorSingle(int n_cosines_, int n_energies_) : CudaPropagatorSingle(0, n_cosines_, n_energies_){
+        /// \brief Constructor which uses device id 0
+        ///
+        /// @param n_cosines Number cosine bins
+        /// @param n_energies Number of energy bins
+        CudaPropagatorSingle(int n_cosines, int n_energies) : CudaPropagatorSingle(0, n_cosines, n_energies){
 
         }
 
+        /// \brief Destructor
         ~CudaPropagatorSingle(){
             cudaSetDevice(deviceId);
             cudaStreamDestroy(stream);
@@ -85,6 +95,8 @@ namespace cudaprob3{
 
         CudaPropagatorSingle(const CudaPropagatorSingle& other) = delete;
 
+        /// \brief Move constructor
+        /// @param other
         CudaPropagatorSingle(CudaPropagatorSingle&& other) : Propagator<FLOAT_T>(other){
             *this = std::move(other);
 
@@ -94,6 +106,8 @@ namespace cudaprob3{
 
         CudaPropagatorSingle& operator=(const CudaPropagatorSingle& other) = delete;
 
+        /// \brief Move assignment operator
+        /// @param other
         CudaPropagatorSingle& operator=(CudaPropagatorSingle&& other){
             Propagator<FLOAT_T>::operator=(std::move(other));
 
@@ -108,6 +122,8 @@ namespace cudaprob3{
             deviceId = other.deviceId;
             resultsResideOnHost = other.resultsResideOnHost;
 
+            //the stream is not moved
+
             return *this;
         }
 
@@ -117,7 +133,7 @@ namespace cudaprob3{
             // call parent function to set up host density data
             Propagator<FLOAT_T>::setDensity(radii_, rhos_);
 
-            // copy host density data to device density data
+            // allocate GPU arrays for density information and copy host density data to device density data
             cudaSetDevice(deviceId); CUERR;
 
             int nDensityLayers = this->radii.size();
@@ -130,14 +146,15 @@ namespace cudaprob3{
         }
 
         void setEnergyList(const std::vector<FLOAT_T>& list) override{
-            Propagator<FLOAT_T>::setEnergyList(list);
+            Propagator<FLOAT_T>::setEnergyList(list); // set host energy list
 
+            //copy host energy list to gpu memory
             cudaMemcpy(d_energy_list.get(), this->energyList.data(), sizeof(FLOAT_T) * this->n_energies, H2D); CUERR;
         }
 
         void setCosineList(const std::vector<FLOAT_T>& list) override{
-            Propagator<FLOAT_T>::setCosineList(list);
-
+            Propagator<FLOAT_T>::setCosineList(list); // set host cosine list
+            //copy host cosine list to gpu memory
             cudaMemcpy(d_cosine_list.get(), this->cosineList.data(), sizeof(FLOAT_T) * this->n_cosines, H2D); CUERR;
         }
 
@@ -170,6 +187,7 @@ namespace cudaprob3{
             cudaMemcpy(d_maxlayers.get(), this->maxlayers.data(), sizeof(int) * this->n_cosines, H2D); CUERR;
         }
 
+        // launch the calculation kernel without waiting for its completion
         void calculateProbabilitiesAsync(NeutrinoType type){
             if(!this->isInit)
                 throw std::runtime_error("CudaPropagatorSingle::calculateProbabilities. Object has been moved from.");
@@ -179,6 +197,7 @@ namespace cudaprob3{
             resultsResideOnHost = false;
             cudaSetDevice(deviceId); CUERR;
 
+            // set neutrino parameters for core physics functions for both host and device
             physics::setMixMatrix(this->Mix_U.data());
             physics::setMassDifferences(this->dm.data());
 
@@ -206,6 +225,7 @@ namespace cudaprob3{
             cudaStreamSynchronize(stream); CUERR;
         }
 
+        // copy results from device to host
         void getResultFromDevice(){
             cudaSetDevice(deviceId); CUERR;
             cudaMemcpyAsync(resultList.get(), d_result_list.get(),
@@ -230,19 +250,26 @@ namespace cudaprob3{
         bool resultsResideOnHost = false;
     };
 
-
-
-    /*
-    * Wrapper class for multiple GPUs
-    *
-    *
-    */
-
+    /// \class CudaPropagator
+    /// \brief Multi-GPU neutrino propagation. Derived from Propagator.
+    /// \details This is essentially a wrapper around multiple CudaPropagatorSingle instances, one per used GPU
+    /// Most of the setters and calculation functions simply call the appropriate function for each GPU
+    /// @param FLOAT_T The floating point type to use for calculations, i.e float, double
     template<class FLOAT_T>
     class CudaPropagator : public Propagator<FLOAT_T>{
     public:
+        /// \brief Single GPU constructor for device id 0
+        ///
+        /// @param nc Number cosine bins
+        /// @param ne Number of energy bins
         CudaPropagator(int nc, int ne) : CudaPropagator(std::vector<int>{0}, nc, ne, true){}
 
+        /// \brief Constructor
+        ///
+        /// @param ids List of device ids of the GPUs to use
+        /// @param nc Number cosine bins
+        /// @param ne Number of energy bins
+        /// @param failOnInvalidId If true, throw exception if ids contains an invalid device id
         CudaPropagator(const std::vector<int>& ids, int nc, int ne, bool failOnInvalidId = true) : Propagator<FLOAT_T>(nc, ne) {
 
             int nDevices;
@@ -279,22 +306,32 @@ namespace cudaprob3{
                 int deviceIndex = getCosineDeviceIndex(icos);
 
                 cosineIndices[deviceIndex].push_back(icos);
+                // the icos-th path is processed by GPU deviceIndex.
+                // In the subproblem processed by GPU deviceIndex, the icos-th path is the localCosineIndices[icos]-th path
                 localCosineIndices[icos] = cosineIndices[deviceIndex].size() - 1;
             }
 
             for(size_t i = 0; i < deviceIds.size() && i < size_t(this->n_cosines); i++){
-                propagatorVector.push_back(std::unique_ptr<CudaPropagatorSingle<FLOAT_T>>(new CudaPropagatorSingle<FLOAT_T>(deviceIds[i], cosineIndices[i].size(), this->n_energies)));
+                propagatorVector.push_back(
+                    std::unique_ptr<CudaPropagatorSingle<FLOAT_T>>(
+                        new CudaPropagatorSingle<FLOAT_T>(deviceIds[i], cosineIndices[i].size(), this->n_energies)
+                    )
+                );
             }
         }
 
         CudaPropagator(const CudaPropagator& other) = delete;
 
+        /// \brief Move constructor
+        /// @param other
         CudaPropagator(CudaPropagator&& other) : Propagator<FLOAT_T>(other){
             *this = std::move(other);
         }
 
         CudaPropagator& operator=(const CudaPropagator& other) = delete;
 
+        /// \brief Move assignment operator
+        /// @param other
         CudaPropagator& operator=(CudaPropagator&& other){
             Propagator<FLOAT_T>::operator=(std::move(other));
 
@@ -348,6 +385,7 @@ namespace cudaprob3{
             Propagator<FLOAT_T>::setCosineList(list);
 
             for(size_t i = 0; i < propagatorVector.size(); i++){
+                // make list of cosines for GPU i and pass it to propagator i
                 std::vector<FLOAT_T> myCos(cosineIndices[i].size());
                 std::transform(cosineIndices[i].begin(),
                                 cosineIndices[i].end(),
@@ -391,6 +429,7 @@ namespace cudaprob3{
                 propagator->setMaxlayers();
         }
 
+        // get index in device id for the GPU which processes the index_cosine-th path
         int getCosineDeviceIndex(int index_cosine){
         #if 0
                 // block distribution
@@ -417,12 +456,6 @@ namespace cudaprob3{
         // one CudaPropagatorSingle per GPU
         std::vector<std::unique_ptr<CudaPropagatorSingle<FLOAT_T>>> propagatorVector;
     };
-
-
-
-
-
-
 
 }
 

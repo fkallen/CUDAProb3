@@ -36,31 +36,37 @@ along with CUDAProb3++.  If not, see <http://www.gnu.org/licenses/>.
 namespace cudaprob3{
 
 
-    /*
-     * Base class which sets up input parameter on the host.
-     * Concrete implementation of calcuations is provided in derived classes
-     *
-     *
-     *
-     * template parameter FLOAT_T is the floating point type to use for calculations, i.e float, double
-     */
+    /// \class Propagator
+    /// \brief Abstract base class of the library which sets up input parameter on the host.
+    /// Concrete implementation of calcuations is provided in derived classes
+    /// @param FLOAT_T The floating point type to use for calculations, i.e float, double
     template<class FLOAT_T>
     class Propagator{
     public:
-        Propagator(int n_cosines_, int n_energies_) : n_cosines(n_cosines_), n_energies(n_energies_){
+        /// \brief Constructor
+        ///
+        /// @param n_cosines Number cosine bins
+        /// @param n_energies Number of energy bins
+        Propagator(int n_cosines, int n_energies) : n_cosines(n_cosines), n_energies(n_energies){
             energyList.resize(n_energies);
             cosineList.resize(n_cosines);
             maxlayers.resize(n_cosines);
         }
 
+        /// \brief Copy constructor
+        /// @param other
         Propagator(const Propagator& other){
             *this = other;
         }
 
+        /// \brief Move constructor
+        /// @param other
         Propagator(Propagator&& other){
             *this = std::move(other);
         }
 
+        /// \brief Copy assignment operator
+        /// @param other
         Propagator& operator=(const Propagator& other){
             energyList = other.energyList;
             cosineList = other.cosineList;
@@ -79,6 +85,8 @@ namespace cudaprob3{
             return *this;
         }
 
+        /// \brief Move assignment operator
+        /// @param other
         Propagator& operator=(Propagator&& other){
             energyList = std::move(other.energyList);
             cosineList = std::move(other.cosineList);
@@ -99,9 +107,13 @@ namespace cudaprob3{
             return *this;
         }
 
-
     public:
-        // set density from arrays. radii_ and rhos_ must be same size. both radii_ and rhos_ must be sorted, in the same order.
+        /// \brief Set density information from arrays.
+        /// \details radii_ and rhos_ must be same size. both radii_ and rhos_ must be sorted, in the same order.
+        /// The density (g/cm^3) at a distance (km) from the center of the sphere between radii_[i], exclusive,
+        /// and radii_[j], inclusive, i < j  is assumed to be rhos_[j]
+        /// @param radii_ List of radii
+        /// @param rhos_ List of densities
         virtual void setDensity(const std::vector<FLOAT_T>& radii_, const std::vector<FLOAT_T>& rhos_){
 
             if(rhos_.size() != radii_.size()){
@@ -136,10 +148,10 @@ namespace cudaprob3{
 
             coslimit.clear();
 
-            // first element of _Radii is largest radius!
+            // first element of _Radii is largest radius
             for(size_t i=0; i < radii.size() ; i++ )
             {
-                // Using a cosine threshold instead! //
+                // Using a cosine threshold
                 FLOAT_T x = -1* sqrt( 1 - (radii[i] * radii[i] / ( Constants<FLOAT_T>::REarth()*Constants<FLOAT_T>::REarth())) );
                 if ( i  == 0 ) x = 0;
                 coslimit.push_back(x);
@@ -148,7 +160,12 @@ namespace cudaprob3{
             setMaxlayers();
         }
 
-        // set density from file
+        /// \brief Set density information from file
+        /// \details File must contain two columns where the first column contains the radius (km)
+        /// and the second column contains the density (g/cm³).
+        /// The first row must have the radius 0. The last row must have to radius of the sphere
+        ///
+        /// @param filename File with density information
         virtual void setDensityFromFile(const std::string& filename){
             std::ifstream file(filename);
             if(!file)
@@ -166,7 +183,11 @@ namespace cudaprob3{
             setDensity(radii, rhos);
         }
 
-        // set mixing angles and cp phase. units are radians
+        /// \brief Set mixing angles and cp phase in radians
+        /// @param theta12
+        /// @param theta13
+        /// @param theta23
+        /// @param dCP
         virtual void setMNSMatrix(FLOAT_T theta12, FLOAT_T theta13, FLOAT_T theta23, FLOAT_T dCP){
 
             const FLOAT_T s12 = sin(theta12);
@@ -199,7 +220,9 @@ namespace cudaprob3{
             U(2,2).im  =  0.0;
         }
 
-        // set neutrino mass differences (m_i_j)^2 in electron volt. no assumptions about mass hierarchy are made
+        /// \brief Set neutrino mass differences (m_i_j)^2 in (eV)^2. no assumptions about mass hierarchy are made
+        /// @param dm12sq
+        /// @param dm23sq
         virtual void setNeutrinoMasses(FLOAT_T dm12sq, FLOAT_T dm23sq){
             FLOAT_T mVac[3];
 
@@ -224,7 +247,8 @@ namespace cudaprob3{
 
         }
 
-        // set the energy bins. energies are given in GeV
+        /// \brief Set the energy bins. Energies are given in GeV
+        /// @param list Energy list
         virtual void setEnergyList(const std::vector<FLOAT_T>& list){
             if(list.size() != size_t(n_energies))
                 throw std::runtime_error("Propagator::setEnergyList. Propagator was not created for this number of energy nodes");
@@ -232,7 +256,8 @@ namespace cudaprob3{
             energyList = list;
         }
 
-        // set cosine bins. cosines are given in radians
+        /// \brief Set cosine bins. Cosines are given in radians
+        /// @param list Cosine list
         virtual void setCosineList(const std::vector<FLOAT_T>& list){
             if(list.size() != size_t(n_cosines))
                 throw std::runtime_error("Propagator::setCosineList. Propagator was not created for this number of cosine nodes");
@@ -248,7 +273,9 @@ namespace cudaprob3{
             isSetCosine = true;
         }
 
-        // set production height in km of neutrinos
+        /// \brief Set production height in km of neutrinos
+        /// \details Adds a layer of length heightKM with zero density to the density model
+        /// @param heightKM Set neutrino production height
         virtual void setProductionHeight(FLOAT_T heightKM){
             if(!isSetCosine)
                 throw std::runtime_error("must set cosine list before production height");
@@ -258,13 +285,19 @@ namespace cudaprob3{
             isSetProductionHeight = true;
         }
 
-        // calculate the probability of each cell
+        /// \brief Calculate the probability of each cell
+        /// @param type Neutrino or Antineutrino
         virtual void calculateProbabilities(NeutrinoType type) = 0;
 
-        // get oscillation weight for specific cosine and energy
+        /// \brief get oscillation weight for specific cosine and energy
+        /// @param index_cosine Cosine bin index (zero based)
+        /// @param index_energy Energy bin index (zero based)
+        /// @param t Specify which probability P(i->j)
         virtual FLOAT_T getProbability(int index_cosine, int index_energy, ProbType t) = 0;
 
     protected:
+        // for each cosine bin, determine the number of layers which will be crossed by the neutrino path
+        // the atmospheric layers is excluded
         virtual void setMaxlayers(){
             for(int index_cosine = 0; index_cosine < n_cosines; index_cosine++){
                 FLOAT_T c = cosineList[index_cosine];

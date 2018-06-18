@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classcudaprob3_1_1Propagator.html" title="Abstract base class of the library which sets up input parameter on the host. Concrete implementation..." alt="" coords="5,71,159,112"/>
+<area shape="rect" id="node2" href="$classcudaprob3_1_1CpuPropagator.html" title="Multi&#45;threaded CPU neutrino propagation. Derived from Propagator. " alt="" coords="210,5,387,47"/>
+<area shape="rect" id="node3" href="$classcudaprob3_1_1CudaPropagator.html" title="Multi&#45;GPU neutrino propagation. Derived from Propagator. " alt="" coords="207,71,391,112"/>
+<area shape="rect" id="node4" href="$classcudaprob3_1_1CudaPropagatorSingle.html" title="Single&#45;GPU neutrino propagation. Derived from Propagator. " alt="" coords="207,136,391,177"/>
+</map>

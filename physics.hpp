@@ -114,13 +114,13 @@ namespace cudaprob3{
             #ifdef __NVCC__
                 __constant__ double mix_data_device [9 * sizeof(math::ComplexNumber<double>)] ;
                 __constant__ double mass_data_device[9];
-                __constant__ double A_X_factor_device[81 * 4];
+                __constant__ double A_X_factor_device[81 * 4]; //precomputed factors which only depend on the mixing matrix for faster calculation
                 __constant__ int mass_order_device[3];
             #endif
 
             double mix_data [9 * sizeof(math::ComplexNumber<double>)] ;
             double mass_data[9];
-            double A_X_factor[81 * 4];
+            double A_X_factor[81 * 4]; //precomputed factors for faster calculation
             int mass_order[3];
 
 
@@ -131,6 +131,7 @@ namespace cudaprob3{
             void setMixMatrix(math::ComplexNumber<FLOAT_T>* U){
                 memcpy((FLOAT_T*)mix_data, U, sizeof(math::ComplexNumber<FLOAT_T>) * 9);
 
+                //precomputed factors for faster calculation
                 for (int n=0; n<3; n++) {
                     for (int m=0; m<3; m++) {
                         for (int i=0; i<3; i++) {
@@ -144,6 +145,7 @@ namespace cudaprob3{
                     }
                 }
                 #ifdef __NVCC__
+                    //copy to constant memory on GPU
                     cudaMemcpyToSymbol(mix_data_device, U, sizeof(math::ComplexNumber<FLOAT_T>) * 9, 0, H2D); CUERR;
                     cudaMemcpyToSymbol(A_X_factor_device, A_X_factor, sizeof(FLOAT_T) * 81 * 4, 0, H2D); CUERR;
                 #endif
@@ -156,6 +158,7 @@ namespace cudaprob3{
             void setMixMatrix_host(math::ComplexNumber<FLOAT_T>* U){
                 memcpy((FLOAT_T*)mix_data, U, sizeof(math::ComplexNumber<FLOAT_T>) * 9);
 
+                //precomputed factors for faster calculation
                 for (int n=0; n<3; n++) {
                     for (int m=0; m<3; m++) {
                         for (int i=0; i<3; i++) {
@@ -173,6 +176,7 @@ namespace cudaprob3{
             /*
              * Set global 3x3 neutrino mass difference matrix
              */
+            /// \brief set mass differences to constant memory
             template<typename FLOAT_T>
             void setMassDifferences(FLOAT_T* dm){
                 memcpy((FLOAT_T*)mass_data, dm, sizeof(FLOAT_T) * 9);
@@ -189,6 +193,8 @@ namespace cudaprob3{
                 memcpy((FLOAT_T*)mass_data, dm, sizeof(FLOAT_T) * 9);
             }
 
+
+            //
             template<typename FLOAT_T>
             void prepare_getMfast(NeutrinoType type) {
                 FLOAT_T alphaV, betaV, gammaV, argV, tmpV;
@@ -249,6 +255,15 @@ namespace cudaprob3{
            /*
             * Return induced neutrino mass difference matrix d_dmMatMat,
             * and d_dmMatVac, which is the mass difference matrix between induced masses and vacuum masses
+            *
+            * The strategy to sort out the three roots is to compute the vacuum
+            * mass the same way as the "matter" masses are computed then to sort
+            * the results according to the input vacuum masses. Subsequently, the "matter" masses
+            * are calculated, using the found sorting for vacuum masses
+            *
+            * In the original implementation the order of vacuum masses is computed for each bin.
+            * However, the ordering of vacuum masses does only depend on the constant neutrino mixing matrix.
+            * Thus, the ordering can be precomputed, which is done in prepare_getMfast
             */
             template<typename FLOAT_T>
             HOSTDEVICEQUALIFIER
@@ -266,10 +281,6 @@ namespace cudaprob3{
                         return -Constants<FLOAT_T>::tworttwoGf()*Enu*rho;
                 }();
 
-                /* The strategy to sort out the three roots is to compute the vacuum
-                * mass the same way as the "matter" masses are computed then to sort
-                * the results according to the input vacuum masses
-                */
                 const FLOAT_T alpha  = fac + DM(0,1) + DM(0,2);
 
                 const FLOAT_T beta = DM(0,1)*DM(0,2) +
@@ -330,110 +341,8 @@ namespace cudaprob3{
             }
 
             /*
-            * Return induced neutrino mass difference matrix d_dmMatMat,
-            * and d_dmMatVac, which is the mass difference matrix between induced masses and vacuum masses
+                Calculate the product of Eq. (11)
             */
-            template<typename FLOAT_T>
-            HOSTDEVICEQUALIFIER
-            void getM(FLOAT_T Enu, FLOAT_T rho,
-                NeutrinoType type,
-                FLOAT_T d_dmMatMat[][3], FLOAT_T d_dmMatVac[][3]) {
-
-                FLOAT_T alpha, beta, gamma, fac=0.0, arg, tmp;
-                FLOAT_T alphaV, betaV, gammaV, argV, tmpV;
-                FLOAT_T theta0, theta1, theta2;
-                FLOAT_T theta0V, theta1V, theta2V;
-                FLOAT_T mMatU[3], mMatV[3], mMat[3];
-
-                /* Equations (22) fro Barger et.al.*/
-
-                if(type == Antineutrino)
-                    fac =  Constants<FLOAT_T>::tworttwoGf()*Enu*rho;
-                else
-                    fac = -Constants<FLOAT_T>::tworttwoGf()*Enu*rho;
-
-                /* The strategy to sort out the three roots is to compute the vacuum
-                * mass the same way as the "matter" masses are computed then to sort
-                * the results according to the input vacuum masses
-                */
-                alpha  = fac + DM(0,1) + DM(0,2);
-                alphaV = DM(0,1) + DM(0,2);
-
-                beta = DM(0,1)*DM(0,2) +
-                    fac*(DM(0,1)*(1.0 -
-                            U(0,1).re*U(0,1).re -
-                            U(0,1).im*U(0,1).im ) +
-                    DM(0,2)*(1.0-
-                            U(0,2).re*U(0,2).re -
-                            U(0,2).im*U(0,2).im));
-                betaV = DM(0,1) * DM(0,2);
-
-
-                gamma = fac*DM(0,1)*DM(0,2)*(U(0,0).re * U(0,0).re + U(0,0).im * U(0,0).im);
-                gammaV = 0.0;
-
-                /* Compute the argument of the arc-cosine */
-                tmp = alpha*alpha-3.0*beta;
-                tmpV = alphaV*alphaV-3.0*betaV;
-
-                if (tmp<0.0) {
-                    tmp = 0.0;
-                }
-
-                /* Equation (21) */
-                arg = (2.0*alpha*alpha*alpha-9.0*alpha*beta+27.0*gamma)/
-                    (2.0*sqrt(tmp*tmp*tmp));
-                if (fabs(arg)>1.0) arg = arg/fabs(arg);
-                argV = (2.0*alphaV*alphaV*alphaV-9.0*alphaV*betaV+27.0*gammaV)/
-                    (2.0*sqrt(tmpV*tmpV*tmpV));
-                if (fabs(argV)>1.0) argV = argV/fabs(argV);
-
-                /* These are the three roots the paper refers to */
-                theta0 = acos(arg)/3.0;
-                theta1 = theta0-(2.0*M_PI/3.0);
-                theta2 = theta0+(2.0*M_PI/3.0);
-
-                theta0V = acos(argV)/3.0;
-                theta1V = theta0V-(2.0*M_PI/3.0);
-                theta2V = theta0V+(2.0*M_PI/3.0);
-
-                mMatU[0] = mMatU[1] = mMatU[2] = -(2.0/3.0)*sqrt(tmp);
-                mMatU[0] *= cos(theta0); mMatU[1] *= cos(theta1); mMatU[2] *= cos(theta2);
-                tmp = DM(0,0) - alpha/3.0;
-                mMatU[0] += tmp; mMatU[1] += tmp; mMatU[2] += tmp;
-
-                mMatV[0] = mMatV[1] = mMatV[2] = -(2.0/3.0)*sqrt(tmpV);
-                mMatV[0] *= cos(theta0V); mMatV[1] *= cos(theta1V); mMatV[2] *= cos(theta2V);
-                tmpV = DM(0,0) - alphaV/3.0;
-                mMatV[0] += tmpV; mMatV[1] += tmpV; mMatV[2] += tmpV;
-
-                /* Sort according to which reproduce the vaccum eigenstates */
-
-                for (int i=0; i<3; i++) {
-                    tmpV = fabs(DM(i,0)-mMatV[0]);
-                    int k = 0;
-
-                    for (int j=1; j<3; j++) {
-                    tmp = fabs(DM(i,0)-mMatV[j]);
-                    if (tmp<tmpV) {
-                        k = j;
-                        tmpV = tmp;
-                    }
-                    }
-                    mMat[i] = mMatU[k];
-                }
-
-
-                for (int i=0; i<3; i++) {
-
-                    for (int j=0; j<3; j++) {
-                    d_dmMatMat[i][j] = mMat[i] - mMat[j];
-                    d_dmMatVac[i][j] = mMat[i] - DM(j,0);
-                    }
-                }
-            }
-
-
             template<typename FLOAT_T>
             HOSTDEVICEQUALIFIER
             void get_product(const FLOAT_T L, const FLOAT_T E, const FLOAT_T rho, const FLOAT_T d_dmMatVac[][3], const FLOAT_T d_dmMatMat[][3],
@@ -447,7 +356,6 @@ namespace cudaprob3{
                     else
                         return -Constants<FLOAT_T>::tworttwoGf()*E*rho;
                 }();
-
 
                 /* Calculate the matrix 2EH-M_j */
                 UNROLLQUALIFIER
@@ -470,7 +378,7 @@ namespace cudaprob3{
                     twoEHmM[2][2][j].re-= d_dmMatVac[j][2];
                 }
 
-                /* Calculate the product in eq.(10) of twoEHmM for j!=k */
+                /* Calculate the product in eq.(11) of twoEHmM for j!=k */
                 //memset(product, 0, 3*3*3*sizeof(math::ComplexNumber<FLOAT_T>));
                 UNROLLQUALIFIER
                 for (int i=0; i<3; i++) {
@@ -538,7 +446,7 @@ namespace cudaprob3{
                 }
 
 
-                /* Make the sum with the exponential factor */
+                /* Make the sum with the exponential factor in Eq. (11) */
                 //memset(X, 0, 3*3*sizeof(math::ComplexNumber<FLOAT_T>));
                 UNROLLQUALIFIER
                 for (int i=0; i<3; i++) {
@@ -575,7 +483,7 @@ namespace cudaprob3{
                     }
                 }
 
-                /* Compute the product with the mixing matrices */
+                /* Eq. (10)*/
                 //memset(A, 0, 3*3*2*sizeof(FLOAT_T));
 
                 UNROLLQUALIFIER
@@ -618,15 +526,13 @@ namespace cudaprob3{
 
                 FLOAT_T d_dmMatVac[3][3], d_dmMatMat[3][3];
 
-#if 0
-                getM(Enu, rho, type, d_dmMatMat, d_dmMatVac);
-#else
                 getMfast(Enu, rho, type, d_dmMatMat, d_dmMatVac);
-#endif
-
                 getA(Len, Enu, rho, d_dmMatVac, d_dmMatMat, type, Aout,phase_offset);
             }
 
+            /*
+                Find density in layer
+            */
             template<typename FLOAT_T>
             HOSTDEVICEQUALIFIER
             FLOAT_T getDensityOfLayer(const FLOAT_T* const rhos, int layer, int max_layer){
@@ -641,9 +547,17 @@ namespace cudaprob3{
                 return rhos[i];
             }
 
+            /*
+                Find distance in layer
+            */
             template<typename FLOAT_T>
             HOSTDEVICEQUALIFIER
-            FLOAT_T getTraversedDistanceOfLayer(const FLOAT_T* const radii, int layer, int max_layer, FLOAT_T PathLength, FLOAT_T TotalEarthLength, FLOAT_T cosine_zenith){
+            FLOAT_T getTraversedDistanceOfLayer(const FLOAT_T* const radii,
+                                                int layer,
+                                                int max_layer,
+                                                FLOAT_T PathLength,
+                                                FLOAT_T TotalEarthLength,
+                                                FLOAT_T cosine_zenith){
 
                 if(cosine_zenith >= 0) return PathLength;
                 if(layer == 0) return PathLength - TotalEarthLength;
@@ -668,8 +582,16 @@ namespace cudaprob3{
 
             template<typename FLOAT_T>
             HOSTDEVICEQUALIFIER
-            void calculate(NeutrinoType type, const FLOAT_T* const cosinelist, int n_cosines, const FLOAT_T* const energylist, int n_energies,
-                        const FLOAT_T* const radii, const FLOAT_T* const rhos, const int* const maxlayers, FLOAT_T ProductionHeightinCentimeter, FLOAT_T* const result){
+            void calculate(NeutrinoType type,
+                            const FLOAT_T* const cosinelist,
+                            int n_cosines,
+                            const FLOAT_T* const energylist,
+                            int n_energies,
+                            const FLOAT_T* const radii,
+                            const FLOAT_T* const rhos,
+                            const int* const maxlayers,
+                            FLOAT_T ProductionHeightinCentimeter,
+                            FLOAT_T* const result){
 
             //prepare more constant data. For the kernel, this is done by the wrapper function callCalculateKernelAsync
             #ifndef __CUDA_ARCH__
@@ -784,16 +706,34 @@ namespace cudaprob3{
             template<typename FLOAT_T>
             KERNEL
             __launch_bounds__( 64, 8 )
-            void calculateKernel(NeutrinoType type, const FLOAT_T* const cosinelist, int n_cosines, const FLOAT_T* const energylist, int n_energies,
-                        const FLOAT_T* const radii, const FLOAT_T* const rhos, const int* const maxlayers, FLOAT_T ProductionHeightinCentimeter, FLOAT_T* const result){
+            void calculateKernel(NeutrinoType type,
+                                const FLOAT_T* const cosinelist,
+                                int n_cosines,
+                                const FLOAT_T* const energylist,
+                                int n_energies,
+                                const FLOAT_T* const radii,
+                                const FLOAT_T* const rhos,
+                                const int* const maxlayers,
+                                FLOAT_T ProductionHeightinCentimeter,
+                                FLOAT_T* const result){
 
                 calculate(type, cosinelist, n_cosines, energylist, n_energies, radii, rhos, maxlayers, ProductionHeightinCentimeter, result);
             }
 
             template<typename FLOAT_T>
-            void callCalculateKernelAsync(dim3 grid, dim3 block, cudaStream_t stream,
-                                        NeutrinoType type, const FLOAT_T* const cosinelist, int n_cosines, const FLOAT_T* const energylist, int n_energies,
-                                        const FLOAT_T* const radii, const FLOAT_T* const rhos, const int* const maxlayers, FLOAT_T ProductionHeightinCentimeter, FLOAT_T* const result){
+            void callCalculateKernelAsync(dim3 grid,
+                                        dim3 block,
+                                        cudaStream_t stream,
+                                        NeutrinoType type,
+                                        const FLOAT_T* const cosinelist,
+                                        int n_cosines,
+                                        const FLOAT_T* const energylist,
+                                        int n_energies,
+                                        const FLOAT_T* const radii,
+                                        const FLOAT_T* const rhos,
+                                        const int* const maxlayers,
+                                        FLOAT_T ProductionHeightinCentimeter,
+                                        FLOAT_T* const result){
 
                 prepare_getMfast<FLOAT_T>(type);
 

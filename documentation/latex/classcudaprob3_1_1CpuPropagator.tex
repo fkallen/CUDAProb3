@@ -1,0 +1,198 @@
+\hypertarget{classcudaprob3_1_1CpuPropagator}{}\section{cudaprob3\+:\+:Cpu\+Propagator$<$ F\+L\+O\+A\+T\+\_\+T $>$ Class Template Reference}
+\label{classcudaprob3_1_1CpuPropagator}\index{cudaprob3\+::\+Cpu\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$@{cudaprob3\+::\+Cpu\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$}}
+
+
+Multi-\/threaded C\+PU neutrino propagation. Derived from \hyperlink{classcudaprob3_1_1Propagator}{Propagator}.  
+
+
+
+
+Inheritance diagram for cudaprob3\+:\+:Cpu\+Propagator$<$ F\+L\+O\+A\+T\+\_\+T $>$\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=213pt]{classcudaprob3_1_1CpuPropagator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for cudaprob3\+:\+:Cpu\+Propagator$<$ F\+L\+O\+A\+T\+\_\+T $>$\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=213pt]{classcudaprob3_1_1CpuPropagator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classcudaprob3_1_1CpuPropagator_a0ba41c470627201c01d10983d785beea}{Cpu\+Propagator} (int n\+\_\+cosines, int n\+\_\+energies, int threads)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\hyperlink{classcudaprob3_1_1CpuPropagator_a344dc85d696677ffa2692b22a6bbea44}{Cpu\+Propagator} (const \hyperlink{classcudaprob3_1_1CpuPropagator}{Cpu\+Propagator} \&other)
+\begin{DoxyCompactList}\small\item\em Copy constructor. \end{DoxyCompactList}\item 
+\hyperlink{classcudaprob3_1_1CpuPropagator_a41038629d7e329e175e09cabbf386975}{Cpu\+Propagator} (\hyperlink{classcudaprob3_1_1CpuPropagator}{Cpu\+Propagator} \&\&other)
+\begin{DoxyCompactList}\small\item\em Move constructor. \end{DoxyCompactList}\item 
+\hyperlink{classcudaprob3_1_1CpuPropagator}{Cpu\+Propagator} \& \hyperlink{classcudaprob3_1_1CpuPropagator_a6b5b29810d22ca383ed9f617beec1523}{operator=} (const \hyperlink{classcudaprob3_1_1CpuPropagator}{Cpu\+Propagator} \&other)
+\begin{DoxyCompactList}\small\item\em Copy assignment operator. \end{DoxyCompactList}\item 
+\hyperlink{classcudaprob3_1_1CpuPropagator}{Cpu\+Propagator} \& \hyperlink{classcudaprob3_1_1CpuPropagator_ac612a070291f5cad723ce1bdbee3d602}{operator=} (\hyperlink{classcudaprob3_1_1CpuPropagator}{Cpu\+Propagator} \&\&other)
+\begin{DoxyCompactList}\small\item\em Move assignment operator. \end{DoxyCompactList}\item 
+void \hyperlink{classcudaprob3_1_1CpuPropagator_adfd6a6c86a5992bce66d0bcf975bc17d}{calculate\+Probabilities} (Neutrino\+Type type) override
+\begin{DoxyCompactList}\small\item\em Calculate the probability of each cell. \end{DoxyCompactList}\item 
+F\+L\+O\+A\+T\+\_\+T \hyperlink{classcudaprob3_1_1CpuPropagator_adb5c71e1b00dd5d436f04dfa9db0b364}{get\+Probability} (int index\+\_\+cosine, int index\+\_\+energy, Prob\+Type t) override
+\begin{DoxyCompactList}\small\item\em get oscillation weight for specific cosine and energy \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class F\+L\+O\+A\+T\+\_\+T$>$\\*
+class cudaprob3\+::\+Cpu\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$}
+
+Multi-\/threaded C\+PU neutrino propagation. Derived from \hyperlink{classcudaprob3_1_1Propagator}{Propagator}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em F\+L\+O\+A\+T\+\_\+T} & The floating point type to use for calculations, i.\+e float, double \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{cudaprob3\+::\+Cpu\+Propagator@{cudaprob3\+::\+Cpu\+Propagator}!Cpu\+Propagator@{Cpu\+Propagator}}
+\index{Cpu\+Propagator@{Cpu\+Propagator}!cudaprob3\+::\+Cpu\+Propagator@{cudaprob3\+::\+Cpu\+Propagator}}
+\subsubsection[{\texorpdfstring{Cpu\+Propagator(int n\+\_\+cosines, int n\+\_\+energies, int threads)}{CpuPropagator(int n_cosines, int n_energies, int threads)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ {\bf cudaprob3\+::\+Cpu\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::{\bf Cpu\+Propagator} (
+\begin{DoxyParamCaption}
+\item[{int}]{n\+\_\+cosines, }
+\item[{int}]{n\+\_\+energies, }
+\item[{int}]{threads}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classcudaprob3_1_1CpuPropagator_a0ba41c470627201c01d10983d785beea}{}\label{classcudaprob3_1_1CpuPropagator_a0ba41c470627201c01d10983d785beea}
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n\+\_\+cosines} & Number cosine bins \\
+\hline
+{\em n\+\_\+energies} & Number of energy bins \\
+\hline
+{\em threads} & Number of threads \\
+\hline
+\end{DoxyParams}
+\index{cudaprob3\+::\+Cpu\+Propagator@{cudaprob3\+::\+Cpu\+Propagator}!Cpu\+Propagator@{Cpu\+Propagator}}
+\index{Cpu\+Propagator@{Cpu\+Propagator}!cudaprob3\+::\+Cpu\+Propagator@{cudaprob3\+::\+Cpu\+Propagator}}
+\subsubsection[{\texorpdfstring{Cpu\+Propagator(const Cpu\+Propagator \&other)}{CpuPropagator(const CpuPropagator &other)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ {\bf cudaprob3\+::\+Cpu\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::{\bf Cpu\+Propagator} (
+\begin{DoxyParamCaption}
+\item[{const {\bf Cpu\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$ \&}]{other}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classcudaprob3_1_1CpuPropagator_a344dc85d696677ffa2692b22a6bbea44}{}\label{classcudaprob3_1_1CpuPropagator_a344dc85d696677ffa2692b22a6bbea44}
+
+
+Copy constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & \\
+\hline
+\end{DoxyParams}
+\index{cudaprob3\+::\+Cpu\+Propagator@{cudaprob3\+::\+Cpu\+Propagator}!Cpu\+Propagator@{Cpu\+Propagator}}
+\index{Cpu\+Propagator@{Cpu\+Propagator}!cudaprob3\+::\+Cpu\+Propagator@{cudaprob3\+::\+Cpu\+Propagator}}
+\subsubsection[{\texorpdfstring{Cpu\+Propagator(\+Cpu\+Propagator \&\&other)}{CpuPropagator(CpuPropagator &&other)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ {\bf cudaprob3\+::\+Cpu\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::{\bf Cpu\+Propagator} (
+\begin{DoxyParamCaption}
+\item[{{\bf Cpu\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$ \&\&}]{other}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classcudaprob3_1_1CpuPropagator_a41038629d7e329e175e09cabbf386975}{}\label{classcudaprob3_1_1CpuPropagator_a41038629d7e329e175e09cabbf386975}
+
+
+Move constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\index{cudaprob3\+::\+Cpu\+Propagator@{cudaprob3\+::\+Cpu\+Propagator}!calculate\+Probabilities@{calculate\+Probabilities}}
+\index{calculate\+Probabilities@{calculate\+Probabilities}!cudaprob3\+::\+Cpu\+Propagator@{cudaprob3\+::\+Cpu\+Propagator}}
+\subsubsection[{\texorpdfstring{calculate\+Probabilities(\+Neutrino\+Type type) override}{calculateProbabilities(NeutrinoType type) override}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ void {\bf cudaprob3\+::\+Cpu\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::calculate\+Probabilities (
+\begin{DoxyParamCaption}
+\item[{Neutrino\+Type}]{type}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}\hypertarget{classcudaprob3_1_1CpuPropagator_adfd6a6c86a5992bce66d0bcf975bc17d}{}\label{classcudaprob3_1_1CpuPropagator_adfd6a6c86a5992bce66d0bcf975bc17d}
+
+
+Calculate the probability of each cell. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & Neutrino or Antineutrino \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classcudaprob3_1_1Propagator_abe3045e287c6a0646474189b3cff14c7}{cudaprob3\+::\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$}.
+
+\index{cudaprob3\+::\+Cpu\+Propagator@{cudaprob3\+::\+Cpu\+Propagator}!get\+Probability@{get\+Probability}}
+\index{get\+Probability@{get\+Probability}!cudaprob3\+::\+Cpu\+Propagator@{cudaprob3\+::\+Cpu\+Propagator}}
+\subsubsection[{\texorpdfstring{get\+Probability(int index\+\_\+cosine, int index\+\_\+energy, Prob\+Type t) override}{getProbability(int index_cosine, int index_energy, ProbType t) override}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ F\+L\+O\+A\+T\+\_\+T {\bf cudaprob3\+::\+Cpu\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::get\+Probability (
+\begin{DoxyParamCaption}
+\item[{int}]{index\+\_\+cosine, }
+\item[{int}]{index\+\_\+energy, }
+\item[{Prob\+Type}]{t}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}\hypertarget{classcudaprob3_1_1CpuPropagator_adb5c71e1b00dd5d436f04dfa9db0b364}{}\label{classcudaprob3_1_1CpuPropagator_adb5c71e1b00dd5d436f04dfa9db0b364}
+
+
+get oscillation weight for specific cosine and energy 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index\+\_\+cosine} & Cosine bin index (zero based) \\
+\hline
+{\em index\+\_\+energy} & Energy bin index (zero based) \\
+\hline
+{\em t} & Specify which probability P(i-\/$>$j) \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classcudaprob3_1_1Propagator_a279ff90463e887754db8379c9582c943}{cudaprob3\+::\+Propagator$<$ F\+L\+O\+A\+T\+\_\+\+T $>$}.
+
+\index{cudaprob3\+::\+Cpu\+Propagator@{cudaprob3\+::\+Cpu\+Propagator}!operator=@{operator=}}
+\index{operator=@{operator=}!cudaprob3\+::\+Cpu\+Propagator@{cudaprob3\+::\+Cpu\+Propagator}}
+\subsubsection[{\texorpdfstring{operator=(const Cpu\+Propagator \&other)}{operator=(const CpuPropagator &other)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ {\bf Cpu\+Propagator}\& {\bf cudaprob3\+::\+Cpu\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::operator= (
+\begin{DoxyParamCaption}
+\item[{const {\bf Cpu\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$ \&}]{other}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classcudaprob3_1_1CpuPropagator_a6b5b29810d22ca383ed9f617beec1523}{}\label{classcudaprob3_1_1CpuPropagator_a6b5b29810d22ca383ed9f617beec1523}
+
+
+Copy assignment operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & \\
+\hline
+\end{DoxyParams}
+\index{cudaprob3\+::\+Cpu\+Propagator@{cudaprob3\+::\+Cpu\+Propagator}!operator=@{operator=}}
+\index{operator=@{operator=}!cudaprob3\+::\+Cpu\+Propagator@{cudaprob3\+::\+Cpu\+Propagator}}
+\subsubsection[{\texorpdfstring{operator=(\+Cpu\+Propagator \&\&other)}{operator=(CpuPropagator &&other)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class F\+L\+O\+A\+T\+\_\+T $>$ {\bf Cpu\+Propagator}\& {\bf cudaprob3\+::\+Cpu\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$\+::operator= (
+\begin{DoxyParamCaption}
+\item[{{\bf Cpu\+Propagator}$<$ F\+L\+O\+A\+T\+\_\+T $>$ \&\&}]{other}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classcudaprob3_1_1CpuPropagator_ac612a070291f5cad723ce1bdbee3d602}{}\label{classcudaprob3_1_1CpuPropagator_ac612a070291f5cad723ce1bdbee3d602}
+
+
+Move assignment operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+cpupropagator.\+hpp\end{DoxyCompactItemize}
