@@ -1,4 +1,3 @@
-
 # CUDAProb3++
 
 CUDAProb3++ calculates the effect of 3-flavor neutrino oscillation for neutrinos propagating through a sphere with piecewise constant density.
@@ -52,3 +51,8 @@ propagator->setProductionHeight(22.0); // set neutrino production height in kilo
 A complete example is shown in example/main.cpp
 
 To compile and run the example code, please set the GPU architecture flag in the Makefile according to your architecture.
+
+# Publication
+This work is presented in the following paper.
+
+Felix Kallenborn, Christian Hundt, Sebastian Böser, Bertil Schmidt, Massively parallel computation of atmospheric neutrino oscillations on CUDA-enabled accelerators, Computer Physics Communications, Volume 234, https://doi.org/10.1016/j.cpc.2018.07.022
